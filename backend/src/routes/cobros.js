@@ -12,7 +12,7 @@ router.get('/por-dia', verifyToken, async (req, res) => {
     let where = `
       WHERE LTRIM(RTRIM(e.employee_i)) NOT LIKE '%[^0-9]%'
         AND LEN(LTRIM(RTRIM(e.employee_i))) > 0
-        AND c.anulado <> 1
+        AND c.anulado = 0
     `
     if (desde) {
       request.input('desde', sql.Date, desde)
