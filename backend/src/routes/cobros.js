@@ -16,18 +16,18 @@ router.get('/por-dia', verifyToken, async (req, res) => {
     `
     if (desde) {
       request.input('desde', sql.Date, desde)
-      where += ' AND CONVERT(DATE, c.fec_cob) >= @desde'
+      where += ' AND CONVERT(DATE, c.fe_us_in) >= @desde'
     }
     if (hasta) {
       request.input('hasta', sql.Date, hasta)
-      where += ' AND CONVERT(DATE, c.fec_cob) <= @hasta'
+      where += ' AND CONVERT(DATE, c.fe_us_in) <= @hasta'
     }
 
     const result = await request.query(`
       SELECT
         LTRIM(RTRIM(e.employee_i))  AS employee_i,
         LTRIM(RTRIM(e.last_name))   AS nombre,
-        CONVERT(DATE, c.fec_cob)    AS fecha,
+        CONVERT(DATE, c.fe_us_in)   AS fecha,
         COUNT(*)                    AS total_cobros
       FROM dbo.cobros c
       INNER JOIN MasterProfit.dbo.employee e
@@ -36,7 +36,7 @@ router.get('/por-dia', verifyToken, async (req, res) => {
       GROUP BY
         LTRIM(RTRIM(e.employee_i)),
         LTRIM(RTRIM(e.last_name)),
-        CONVERT(DATE, c.fec_cob)
+        CONVERT(DATE, c.fe_us_in)
       ORDER BY fecha DESC, nombre ASC
     `)
     res.json(result.recordset)
